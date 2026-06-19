@@ -56,14 +56,14 @@ The test set has a total of 3265 real jobs and 231 fake jobs. Based on the confu
 
 # Model Output Preview
 
-![Model Output](Screenshot (1464).png)
+![Model Output](Screenshot1.png)
 
-![Model Output](Screenshot(1466).png)
+![Model Output](Screenshot11.png)
 
-![Model Output](Screenshot(1467).png)
+![Model Output](Screenshot12.png)
 
-![Model Output](Screenshot(1468).png)
+![Model Output](Screenshot13.png)
 
-![Model Output](Screenshot(1469).png)
+![Model Output](Screenshot14.png)
 
 
