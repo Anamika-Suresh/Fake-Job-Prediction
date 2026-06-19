@@ -33,7 +33,7 @@ Naïve bayes and SGD Classifier are compared on accuracy and F1-scores and a fin
 
 ## Benchmark
 
-The benchmark model for this project is Naïve bayes. The overall accuracy of this model is 0.971 and the F1-score is 0.744. The reason behind using this model has been elaborated above. Any other model’s capabilities will be compared to the results of Naïve bayes.
+The benchmark model for this project is Naïve bayes. The overall accuracy of this model is 0.971 and the F1-score is 0.81. The reason behind using this model has been elaborated above. Any other model’s capabilities will be compared to the results of Naïve bayes.
 
 ## Methodology
 
