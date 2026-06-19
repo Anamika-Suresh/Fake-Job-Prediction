@@ -53,3 +53,17 @@ The text dataset is converted into a term-frequency matrix for further analysis.
 
 The test set has a total of 3265 real jobs and 231 fake jobs. Based on the confusion matrix it is evident that the model identifies real jobs 99.01% of the times. However, fraudulent jobs are identified only 73.5% of the times. Only 2% of the times has the model not identified the class correctly. This shortcoming has been discussed earlier as well as Machine Learning algorithms tend to prefer the dominant classes.
 
+
+# Model Output Preview
+
+![Model Output](Screenshot(1464).png)
+
+![Model Output](Screenshot(1466).png)
+
+![Model Output](Screenshot(1467).png)
+
+![Model Output](Screenshot(1468).png)
+
+![Model Output](Screenshot(1469).png)
+
+
