@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShield | Fake Job Prediction & Verification Engine</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="glass-bg"></div>
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <span class="logo-text">Job<span class="logo-highlight">Shield</span></span>
+            </div>
+            <p class="subtitle">AI-Powered Job Posting Authenticity Verification Engine</p>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <main class="dashboard">
+            <!-- Left Side: Interactive Form -->
+            <section class="form-section">
+                <div class="card glass-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-file-invoice"></i> Job Posting Details</h2>
+                        <div class="demo-buttons">
+                            <button type="button" class="btn btn-outline" id="load-safe-demo">
+                                <i class="fa-solid fa-check-double text-success"></i> Safe Demo
+                            </button>
+                            <button type="button" class="btn btn-outline" id="load-fraud-demo">
+                                <i class="fa-solid fa-triangle-exclamation text-danger"></i> Fraud Demo
+                            </button>
+                        </div>
+                    </div>
+                    <form id="prediction-form" class="job-form">
+                        <!-- Group 1: Basic Information -->
+                        <div class="form-row">
+                            <div class="form-group col-8">
+                                <label for="title">Job Title <span class="required">*</span></label>
+                                <input type="text" id="title" name="title" required placeholder="e.g., Senior Software Engineer">
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="location">Location <span class="required">*</span></label>
+                                <input type="text" id="location" name="location" required placeholder="e.g., US, NY, New York">
+                                <small class="input-hint">Format: Country, State, City</small>
+                            </div>
+                        </div>
+
+                        <!-- Group 2: Detailed Text Fields -->
+                        <div class="form-group">
+                            <label for="company_profile">Company Profile</label>
+                            <textarea id="company_profile" name="company_profile" rows="3" placeholder="Brief details about the hiring company..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Job Description <span class="required">*</span></label>
+                            <textarea id="description" name="description" rows="4" required placeholder="Outline core responsibilities and team role..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="requirements">Role Requirements</label>
+                            <textarea id="requirements" name="requirements" rows="3" placeholder="Key skills, certifications, tools required..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="benefits">Benefits & Perks</label>
+                            <textarea id="benefits" name="benefits" rows="2" placeholder="Healthcare, equity options, PTO..."></textarea>
+                        </div>
+
+                        <!-- Group 3: Metadata Details -->
+                        <div class="form-row">
+                            <div class="form-group col-3">
+                                <label for="required_experience">Experience Level</label>
+                                <select id="required_experience" name="required_experience">
+                                    <option value="">Select Level</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Entry level">Entry Level</option>
+                                    <option value="Associate">Associate</option>
+                                    <option value="Mid-Senior level">Mid-Senior Level</option>
+                                    <option value="Director">Director</option>
+                                    <option value="Executive">Executive</option>
+                                    <option value="Not Applicable">Not Applicable</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-3">
+                                <label for="required_education">Education Level</label>
+                                <select id="required_education" name="required_education">
+                                    <option value="">Select Education</option>
+                                    <option value="High School or equivalent">High School / Equivalent</option>
+                                    <option value="Associate Degree">Associate Degree</option>
+                                    <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                    <option value="Master's Degree">Master's Degree</option>
+                                    <option value="Doctorate">Doctorate</option>
+                                    <option value="Unspecified">Unspecified</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-3">
+                                <label for="industry">Industry</label>
+                                <input type="text" id="industry" name="industry" placeholder="e.g., Computer Software">
+                            </div>
+                            <div class="form-group col-3">
+                                <label for="function">Job Function</label>
+                                <input type="text" id="function" name="function" placeholder="e.g., Engineering">
+                            </div>
+                        </div>
+
+                        <!-- Telecommuting Switch Toggle -->
+                        <div class="form-row toggle-row">
+                            <div class="toggle-container">
+                                <span class="toggle-label">Telecommuting / Remote Work Available?</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="telecommuting" name="telecommuting">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="btn-submit">
+                            <span class="btn-text"><i class="fa-solid fa-circle-nodes"></i> Analyze & Verify Posting</span>
+                            <span class="spinner hidden"><i class="fa-solid fa-circle-notch fa-spin"></i> Processing...</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Right Side: Predictions Readout -->
+            <section class="result-section">
+                <!-- Welcome/Initial State Display -->
+                <div class="card glass-card result-placeholder" id="placeholder-card">
+                    <div class="placeholder-content">
+                        <i class="fa-solid fa-laptop-code pulse-icon"></i>
+                        <h3>Authentication Pipeline Ready</h3>
+                        <p>Fill out the job posting details and click "Analyze & Verify Posting" to evaluate validity scoring.</p>
+                    </div>
+                </div>
+
+                <!-- Actual Results Card (Hidden Initially) -->
+                <div class="card glass-card result-card hidden" id="results-card">
+                    <div class="verdict-banner" id="verdict-banner">
+                        <div class="verdict-icon-container">
+                            <i class="fa-solid" id="verdict-icon"></i>
+                        </div>
+                        <div class="verdict-text">
+                            <h3 id="verdict-title">Evaluating...</h3>
+                            <p id="verdict-subtitle">Status updated</p>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Diagnostic Readings -->
+                    <div class="diagnostics-section">
+                        <h3><i class="fa-solid fa-gauge-high"></i> Pipeline Diagnostics</h3>
+                        
+                        <div class="score-grid">
+                            <!-- Text Model Score -->
+                            <div class="score-card">
+                                <span class="score-title">NLP Text Model Risk</span>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="text-risk-bar"></div>
+                                </div>
+                                <span class="score-value" id="text-risk-val">0.0%</span>
+                            </div>
+
+                            <!-- Numerical Model Score -->
+                            <div class="score-card">
+                                <span class="score-title">Structural Profile Risk</span>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="num-risk-bar"></div>
+                                </div>
+                                <span class="score-value" id="num-risk-val">0.0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Computed Metadata Details -->
+                        <div class="meta-diagnostics">
+                            <div class="meta-item">
+                                <span class="meta-label">Location Risk Ratio:</span>
+                                <span class="meta-value font-mono" id="val-ratio">0.00</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Calculated Text Length:</span>
+                                <span class="meta-value font-mono" id="val-length">0 chars</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Interpreted State/City:</span>
+                                <span class="meta-value font-mono" id="val-location">N/A</span>
+                            </div>
+                        </div>
+
+                        <div class="warning-disclosure hidden" id="fraud-details-box">
+                            <i class="fa-solid fa-circle-exclamation warning-icon"></i>
+                            <div class="warning-text">
+                                <strong>Security Notice:</strong> This posting exhibits metadata or linguistic signatures commonly associated with fraudulent advertisements (e.g. unrealistic description length ratios, high-risk location history, or anomalies in role metadata). Exercise extreme caution.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Javascript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('prediction-form');
+            const btnSubmit = document.getElementById('btn-submit');
+            const submitText = btnSubmit.querySelector('.btn-text');
+            const spinner = btnSubmit.querySelector('.spinner');
+            
+            const placeholderCard = document.getElementById('placeholder-card');
+            const resultsCard = document.getElementById('results-card');
+            
+            const verdictBanner = document.getElementById('verdict-banner');
+            const verdictIcon = document.getElementById('verdict-icon');
+            const verdictTitle = document.getElementById('verdict-title');
+            const verdictSubtitle = document.getElementById('verdict-subtitle');
+            
+            const textRiskBar = document.getElementById('text-risk-bar');
+            const textRiskVal = document.getElementById('text-risk-val');
+            
+            const numRiskBar = document.getElementById('num-risk-bar');
+            const numRiskVal = document.getElementById('num-risk-val');
+            
+            const valRatio = document.getElementById('val-ratio');
+            const valLength = document.getElementById('val-length');
+            const valLocation = document.getElementById('val-location');
+            const fraudDetailsBox = document.getElementById('fraud-details-box');
+
+            // Example data dictionaries for testing
+            const safeDemoData = {
+                title: "Marketing Intern",
+                location: "US, NY, New York",
+                company_profile: "We're Food52, and we've created a groundbreaking and award-winning cooking site. We support, connect, and celebrate home cooks, and give them everything they need in one place.",
+                description: "Food52, a fast-growing, James Beard Award-winning online food community and crowd-sourced recipe site, is looking for a part-time collaborative, detail-oriented marketing intern.",
+                requirements: "Experience with content management systems a major plus. Solid writing skills and social media knowledge are key. Attention to detail is essential.",
+                benefits: "Great work environment in Chelsea, New York. Creative and supportive colleagues.",
+                telecommuting: false,
+                required_experience: "Internship",
+                required_education: "Bachelor's Degree",
+                industry: "Marketing and Advertising",
+                function: "Marketing"
+            };
+
+            const fraudDemoData = {
+                title: "Customer Service Representative (Work From Home)",
+                location: "US, TX, Houston",
+                company_profile: "We are an international financial services and operations firm seeking home-based representatives to manage local payments, wire transfers, and customer accounts. Immediate placement available.",
+                description: "URGENT: Earn $5000 per week working from home! No experience required! We pay weekly via wire transfer. Deposit required for training materials. Earn passive income now!",
+                requirements: "Must have a bank account for transferring funds, high-speed internet, and a personal computer. Ability to start immediately and follow instructions carefully.",
+                benefits: "High weekly commissions, fully remote flexible schedule, rapid path to full-time.",
+                telecommuting: true,
+                required_experience: "Entry level",
+                required_education: "High School or equivalent",
+                industry: "Financial Services",
+                function: "Customer Service"
+            };
+
+            // Demo loader helpers
+            document.getElementById('load-safe-demo').addEventListener('click', () => {
+                fillForm(safeDemoData);
+            });
+
+            document.getElementById('load-fraud-demo').addEventListener('click', () => {
+                fillForm(fraudDemoData);
+            });
+
+            function fillForm(data) {
+                document.getElementById('title').value = data.title;
+                document.getElementById('location').value = data.location;
+                document.getElementById('company_profile').value = data.company_profile;
+                document.getElementById('description').value = data.description;
+                document.getElementById('requirements').value = data.requirements;
+                document.getElementById('benefits').value = data.benefits;
+                document.getElementById('telecommuting').checked = data.telecommuting;
+                document.getElementById('required_experience').value = data.required_experience;
+                document.getElementById('required_education').value = data.required_education;
+                document.getElementById('industry').value = data.industry;
+                document.getElementById('function').value = data.function;
+            }
+
+            // Form Submit Handler
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                btnSubmit.disabled = true;
+                submitText.classList.add('hidden');
+                spinner.classList.remove('hidden');
+                
+                // Construct request payload
+                const payload = {
+                    title: document.getElementById('title').value,
+                    location: document.getElementById('location').value,
+                    company_profile: document.getElementById('company_profile').value,
+                    description: document.getElementById('description').value,
+                    requirements: document.getElementById('requirements').value,
+                    benefits: document.getElementById('benefits').value,
+                    telecommuting: document.getElementById('telecommuting').checked ? 1 : 0,
+                    required_experience: document.getElementById('required_experience').value,
+                    required_education: document.getElementById('required_education').value,
+                    industry: document.getElementById('industry').value,
+                    function: document.getElementById('function').value
+                };
+
+                try {
+                    const response = await fetch('/predict', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('API server returned an error.');
+                    }
+
+                    const result = await response.json();
+                    
+                    // Animate the transition of results panel
+                    placeholderCard.classList.add('hidden');
+                    resultsCard.classList.remove('hidden');
+                    resultsCard.classList.add('slide-up');
+                    
+                    // Render verification status
+                    renderVerdict(result.is_fraud, result.diagnostics);
+
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                } finally {
+                    // Reset submit button state
+                    btnSubmit.disabled = false;
+                    submitText.classList.remove('hidden');
+                    spinner.classList.add('hidden');
+                }
+            });
+
+            function renderVerdict(isFraud, diagnostics) {
+                // Remove existing styles
+                verdictBanner.className = 'verdict-banner';
+                verdictIcon.className = 'fa-solid';
+                
+                if (isFraud === 1) {
+                    // Fraudulent state
+                    verdictBanner.classList.add('banner-fraud');
+                    verdictIcon.classList.add('fa-triangle-exclamation');
+                    verdictTitle.innerText = "High Fraud Risk Alert";
+                    verdictSubtitle.innerText = "Posting classified as Fraudulent/Deceptive";
+                    fraudDetailsBox.classList.remove('hidden');
+                } else {
+                    // Verified safe state
+                    verdictBanner.classList.add('banner-safe');
+                    verdictIcon.classList.add('fa-shield-check');
+                    verdictTitle.innerText = "Verified Listing Safe";
+                    verdictSubtitle.innerText = "Posting exhibits standard credentials";
+                    fraudDetailsBox.classList.add('hidden');
+                }
+                
+                // Animate progress bars
+                const textProb = (diagnostics.text_clf_prob * 100).toFixed(1);
+                const numProb = (diagnostics.num_clf_prob * 100).toFixed(1);
+                
+                textRiskBar.style.width = textProb + '%';
+                textRiskVal.innerText = textProb + '%';
+                
+                numRiskBar.style.width = numProb + '%';
+                numRiskVal.innerText = numProb + '%';
+                
+                // Colorize scores based on risk levels
+                setBarColor(textRiskBar, diagnostics.text_clf_prob);
+                setBarColor(numRiskBar, diagnostics.num_clf_prob);
+
+                // Set diagnostics fields
+                valRatio.innerText = diagnostics.computed_ratio.toFixed(2);
+                valLength.innerText = diagnostics.character_count.toLocaleString() + ' chars';
+                valLocation.innerText = diagnostics.state_city || "Outside US / Blank";
+            }
+
+            function setBarColor(element, probability) {
+                element.className = 'progress-bar';
+                if (probability > 0.7) {
+                    element.classList.add('bg-danger');
+                } else if (probability > 0.3) {
+                    element.classList.add('bg-warning');
+                } else {
+                    element.classList.add('bg-success');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
